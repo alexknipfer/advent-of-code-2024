@@ -46,7 +46,6 @@ function readFile() {
     crlfDelay: Infinity
   });
 
-  let result = 0;
   let matrix = [];
 
   rl.on('line', (line) => {
@@ -54,8 +53,7 @@ function readFile() {
   })
 
   rl.on('close', () => {
-    result += findWord('XMAS', matrix);
-    console.log('Result: ', result);
+    console.log('Result: ', findWord('XMAS', matrix));
   })
 }
 
