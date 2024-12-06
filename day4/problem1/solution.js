@@ -1,7 +1,13 @@
 import fs from 'fs';
 import readline from 'readline';
 
-function dfs(matrix, row, column, word, index) {
+const defaultDirections = [
+  [-1, 1], [0, 1], [1, 1],
+  [-1, 0], [1, 0],
+  [-1, -1], [0, -1], [1, -1]
+];
+
+function dfs(matrix, row, column, word, index, directions = defaultDirections) {
   if (index === word.length) {
     return true;
   }
@@ -10,19 +16,14 @@ function dfs(matrix, row, column, word, index) {
     return false;
   }
 
-  const directions = [
-    [-1, 1], [0, 1], [1, 1],
-    [-1, 0], [1, 0],
-    [-1, -1], [0, -1], [1, -1]
-  ];
-
+  let count = 0;
   for (const [dx, dy] of directions) {
-    if (dfs(matrix, row + dx, column + dy, word, index + 1)) {
-      return true;
+    if (dfs(matrix, row + dx, column + dy, word, index + 1, [[dx, dy]])) {
+      count++;
     }
   }
 
-  return false;
+  return count;
 }
 
 function findWord(word, matrix) {
@@ -30,8 +31,8 @@ function findWord(word, matrix) {
 
   for (let x = 0; x < matrix.length; x++) {
     for (let i = 0; i < matrix[x].length; i++) {
-      if (word[0] === matrix[x][i] && dfs(matrix, x, i, word, 0)) {
-        count++;
+      if (word[0] === matrix[x][i]) {
+        count += dfs(matrix, x, i, word, 0);
       }
     }
   }
